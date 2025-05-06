@@ -1,15 +1,4 @@
-# Express Minimal Starter
-
-My Express starter template repository with minimal dependencies essential to
-start writing an Express app. This app came with a placeholders of database for
-both LibSQL (SQLite forked, via Turso) and MongoDB.
-
-## Features
-
-- **Error Handling**: Centralized error management for better debugging.
-- **Environment Management**: Dynamic environment variable loading for flexible
-  configuration.
-
+# PickledCat
 ## Getting Started
 
 ### Prerequisites
@@ -17,16 +6,15 @@ both LibSQL (SQLite forked, via Turso) and MongoDB.
 Ensure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (Latest LTS version recommended)
-- [pnpm](https://pnpm.io/)
 
 ### Installation
 
 Clone the repository and install dependencies:
 
 ```sh
-git clone https://github.com/chollasit-dev/express-minimal-starter.git
-cd express-minimal-starter
-pnpm install
+git clone https://github.com/GunDeTama/jsd9-pickled-cat-backend.git
+cd jsd9-pickled-cat-backend
+npm install
 ```
 
 ### Environment Setup
@@ -42,23 +30,23 @@ cp .env.example .env
 ### Start the development server
 
 ```sh
-pnpm dev
+npm run dev
 ```
 
 ### Run the production server
 
 ```sh
-pnpm start
+npm start
 ```
 
 ## Testing
 
 ```sh
-pnpm test
+npm run test
 ```
 
 Or if you want it to watch for changes:
 
 ```sh
-pnpm test:watch
+npm run test:watch
 ```

@@ -1,30 +1,12 @@
 export class ResponseConstructor {
   /**
-   * @param {boolean} [success=true] - Whether the process success or not.
-   *   Default is `true`
-   * @param {Record<string, any>} [data=undefined] - Data to return if success.
-   *   Default is `undefined`
-   * @param {string} [message=undefined] - Additional description to return if
-   *   success. Default is `undefined`
-   * @param {import('./error.js').ResponseError} [error=undefined] - Error
-   *   object from `ResponseError` class if failed. Default is `undefined`
+   * @param {string} message - Message to inform when success.
+   * @param {Record<any, any> | undefined} data - Data to return if HTTP status
+   *   is 200.
    */
-  constructor(
-    success = true,
-    data = undefined,
-    message = undefined,
-    error = undefined,
-  ) {
-    this.success = success;
-
-    if (success) {
-      this.data = data;
-      this.message = message;
-      this.error = undefined;
-    } else {
-      this.data = undefined;
-      this.message = undefined;
-      this.error = error;
-    }
+  constructor(message = 'OK', data = undefined) {
+    this.success = true;
+    this.message = message;
+    this.data = data;
   }
 }

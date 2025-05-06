@@ -2,25 +2,26 @@ import { ERROR_CODES } from '../constants/errorCode.js';
 
 export class ResponseError extends Error {
   /**
-   * @param {number} [statusCode=500] - Status to response back to the client.
-   *   Default is `500`
-   * @param {string} [code=ERROR_CODES.internalServerError] - Error name for
-   *   easing then debugging. Default is `ERROR_CODES.internalServerError`
-   * @param {string} [message='Something wrong with the server'] - Short error
-   *   summary to inform the client. Default is `'Something wrong with the
-   *   server'`. Default is `'Something wrong with the server'`
+   * @param {string} message - Error message.
+   * @param {number} statusCode - HTTP status code.
    */
-  constructor(
-    statusCode = 500,
-    code = ERROR_CODES.internalServerError,
-    message = code
-      .split('_')
-      .map((text) => text.at(0).toUpperCase() + text.slice(1).toLowerCase())
-      .join(' '),
-  ) {
+  constructor(message, statusCode) {
     super(message);
+    this.success = statusCode >= 400 ? true : false;
     this.statusCode = statusCode;
-    this.code = code;
-    this.message = message;
+  }
+}
+
+export class BadRequestError extends ResponseError {
+  /** @param {string} message - Custom error message for statusCode 400 */
+  constructor(message = 'Bad request') {
+    super(message, 400);
+  }
+}
+
+export class InternalServerError extends ResponseError {
+  /** @param {string} message - Custom error message for statusCode 500 */
+  constructor(message = 'Internal server error') {
+    super(message, 500);
   }
 }

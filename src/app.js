@@ -6,7 +6,7 @@ import { loggerMiddlewares } from './api/v1/middlewares/loggerMiddleware.js';
 import { healthcheckRoutes } from './api/v1/routes/healthcheckRoutes.js';
 
 import helmet from 'helmet';
-import { corsOptions } from './config/cors.js';
+import { corsOptions } from './configs/cors.js';
 
 const app = express();
 

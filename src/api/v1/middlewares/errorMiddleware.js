@@ -1,4 +1,4 @@
-import { config } from '../../../config/env.js';
+import { config } from '../../../configs/env.js';
 import { ResponseConstructor } from '../../../utils/response.js';
 
 /** @type {import('express').ErrorRequestHandler} */
