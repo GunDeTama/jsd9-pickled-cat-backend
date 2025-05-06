@@ -1,0 +1,5 @@
+{
+  "$schema": "https://json.schemastore.org/nodemon.json",
+  "ignore": [".gitignore", "*.test.js", "test"],
+  "watch": ["src"]
+}

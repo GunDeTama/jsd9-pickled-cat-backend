@@ -1,0 +1,10 @@
+# Blackhole!!!
+node_modules/
+
+# Shhh..., It is secret.
+.env*
+!.env.example
+TODO.local.md
+
+# Testing material
+*.sqlite3

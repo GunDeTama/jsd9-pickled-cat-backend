@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "express-minimal-starter",
+  "version": "0.1.0",
+  "license": "ISC",
+  "author": "chollasit-dev",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon",
+    "start": "node src/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.15.4",
+    "cors": "^2.8.5",
+    "drizzle-orm": "^0.43.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.1.0",
+    "mongoose": "^8.14.1",
+    "nodemon": "^3.1.10"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.0",
+    "supertest": "^7.1.0",
+    "vitest": "^3.1.2"
+  },
+  "packageManager": "pnpm@10.6.3",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ],
+    "overrides": {
+      "esbuild@<=0.24.2": ">=0.25.0"
+    }
+  }
+}
