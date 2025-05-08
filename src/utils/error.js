@@ -1,5 +1,3 @@
-import { ERROR_CODES } from '../constants/errorCode.js';
-
 export class ResponseError extends Error {
   /**
    * @param {string} message - Error message.

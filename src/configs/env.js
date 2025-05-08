@@ -1,5 +1,4 @@
 import { randomBytes } from 'crypto';
-import path from 'path';
 
 export let NODE_ENV;
 
