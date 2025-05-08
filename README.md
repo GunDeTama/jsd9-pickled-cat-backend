@@ -1,4 +1,5 @@
-# PickledCat
+# Pickled Cat Backend
+
 ## Getting Started
 
 ### Prerequisites
@@ -22,10 +23,22 @@ npm install
 1. Copy the example environment file:
 
 ```sh
-cp .env.example .env
+# Local/Development environment
+cp .env.example .env.local
+
+# Or for production-like environment
+cp .env.example .env.local
 ```
 
-2. Edit the `.env` file and fill in your actual configuration values.
+2. Add the **new** `.env` file for loading either development or production
+   environment.
+
+```sh
+NODE_ENV=development
+
+# Or
+NODE_ENV=production
+```
 
 ### Start the development server
 
