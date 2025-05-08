@@ -1,9 +1,7 @@
 import { app } from './app.js';
-import { config } from './config/env.js';
-import * as mongoDb from './config/mongo.js';
-import * as turso from './config/turso.js';
+import { config } from './configs/env.js';
+import * as mongoDb from './configs/mongo.js';
 
-await turso.initializeDb();
 await mongoDb.initializeDb();
 
 const { HOSTNAME, PORT } = config;

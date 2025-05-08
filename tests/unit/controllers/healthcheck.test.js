@@ -12,4 +12,4 @@ it('GET /healthcheck failed', () =>
   supertest(app)
     .get('/healthcheck')
     .expect('content-type', /json/)
-    .expect(503));
+    .expect(500));

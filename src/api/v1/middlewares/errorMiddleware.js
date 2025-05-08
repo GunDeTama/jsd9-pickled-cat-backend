@@ -1,5 +1,4 @@
-import { config } from '../../../config/env.js';
-import { ResponseConstructor } from '../../../utils/response.js';
+import { config } from '../../../configs/env.js';
 
 /** @type {import('express').ErrorRequestHandler} */
 export const errorMiddleware = (err, req, res, next) => {
@@ -10,7 +9,5 @@ export const errorMiddleware = (err, req, res, next) => {
     stack: config.NODE_ENV === 'production' ? undefined : err.stack,
   };
 
-  res
-    .status(err.statusCode)
-    .json(new ResponseConstructor(false, undefined, undefined, error));
+  res.status(err.statusCode).json(error);
 };

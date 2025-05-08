@@ -1,4 +1,4 @@
-import { config } from '../config/env.js';
+import { config } from './env.js';
 const { CORS_ALLOW_ORIGIN, CORS_CREDENTIALS } = config;
 
 /** @type {import('cors').CorsOptions} */
