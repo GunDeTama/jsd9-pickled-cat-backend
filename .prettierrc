@@ -9,9 +9,7 @@
   "htmlWhitespaceSensitivity": "css",
   "insertPragma": false,
   "jsxSingleQuote": true,
-  "plugins": [
-    "prettier-plugin-organize-imports"
-  ],
+  "plugins": ["prettier-plugin-organize-imports"],
   "printWidth": 80,
   "proseWrap": "always",
   "quoteProps": "as-needed",
