@@ -5,7 +5,7 @@ export class ResponseError extends Error {
    */
   constructor(message, statusCode) {
     super(message);
-    this.success = statusCode >= 400 ? true : false;
+    this.success = statusCode >= 400 ? false : true;
     this.statusCode = statusCode;
   }
 }
