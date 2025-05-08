@@ -8,10 +8,10 @@
   "main": "src/server.js",
   "scripts": {
     "dev": "nodemon",
+    "format": "prettier -w .",
     "start": "node src/server.js",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "format": "prettier -w ."
+    "test:watch": "vitest"
   },
   "dependencies": {
     "cors": "^2.8.5",

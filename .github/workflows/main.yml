@@ -1,0 +1,35 @@
+name: format
+run-name: format
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    types:
+      - opened
+      - reopened
+      - unlocked
+      - synchronize
+
+jobs:
+  format-lint-build:
+    runs-on: ubuntu-latest
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }} # For non-push event
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          check-latest: true
+      - run: npm ci
+      - name: format
+        run: npm run format
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'style: auto format'
