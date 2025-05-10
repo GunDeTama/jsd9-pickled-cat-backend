@@ -6,13 +6,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     maxlength: 100,
     minlength: 1,
-    required: true
+    required: true,
   },
   lastname: {
     type: String,
     maxlength: 100,
     minlength: 1,
-    required: true
+    required: true,
   },
   email: {
     type: String,
@@ -20,36 +20,36 @@ const UserSchema = new mongoose.Schema({
     minlength: 5,
     required: true,
     validate: {
-      validator: v => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v),
-      message: props => `${props.value} is not a valid email!`
-    }
+      validator: (v) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v),
+      message: (props) => `${props.value} is not a valid email!`,
+    },
   },
   password: {
     type: String,
     minlength: 6,
-    required: true
+    required: true,
   },
   phone: {
     type: String,
     validate: {
-      validator: v => /^\d{9,10}$/.test(v),
-      message: props => `${props.value} is not a valid phone number!`
-    }
+      validator: (v) => /^\d{9,10}$/.test(v),
+      message: (props) => `${props.value} is not a valid phone number!`,
+    },
   },
   address: AddressSchema,
   role: {
     type: String,
     enum: ['admin', 'customer'],
-    default: 'customer'
+    default: 'customer',
   },
   created_at: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   updated_at: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model('User', UserSchema); 
+module.exports = mongoose.model('User', UserSchema);
