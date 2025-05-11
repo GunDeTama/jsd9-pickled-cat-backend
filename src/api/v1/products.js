@@ -13,7 +13,7 @@ const router = Router();
 router.get('/products', getAllProducts);
 
 // Get a product By Id
-router.get("/product/:productId", getProductById);
+router.get('/product/:productId', getProductById);
 
 // Create product
 router.post('/products', createProduct);
