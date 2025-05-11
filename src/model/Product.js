@@ -6,7 +6,7 @@ const ProductSchema = new Schema({
   price: { type: Number, required: true },
   discount: { type: Number, default: 0 },
   stock: { type: Number, default: 0 },
-  categories: {
+  category: {
     type: String,
     enum: [
       'อาหารแมวพรีเมียม',
@@ -18,7 +18,7 @@ const ProductSchema = new Schema({
     ],
     required: true,
   },
-  options: { type: [String], default: [] },
+  option: { type: [String], default: [] },
   sizes: { type: [String], default: [] },
   images: {
     type: [String],
