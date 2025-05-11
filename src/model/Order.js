@@ -65,9 +65,12 @@ const OrderSchema = new Schema({
     default: Date.now,
     required: true,
   },
+}, {
+  timestamps: { createdAt: 'order_at', updatedAt: 'updated_at' },
 });
+
 
 const Order = model("Order", OrderSchema);
 
-export {Order, OrderItemSchema };
+export default {Order, OrderItemSchema };
 
