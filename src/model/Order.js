@@ -21,10 +21,12 @@ const OrderItemSchema = new Schema({
   price_option: {
     type: String,
     enum: ["option1", "option2", "option3"],
+    required: true,
   },
   product_size: {
     type: String,
     enum: ["option1", "option2", "option3"],
+    required: true,
   },
 });
 
