@@ -14,6 +14,32 @@ export const getAllProducts = async (req, res) => {
   }
 };
 
+// Get a product by id
+export const getProductById = async (req, res) => {
+  const productId = req.params.productId;
+  try {
+    const product = await Product.findOne({ _id: productId });
+    if (!product) {
+      return res.status(404).json({
+        error: true,
+        message: 'Product not found',
+      });
+    }
+
+    return res.json({
+      error: false,
+      product,
+      message: 'Product retrieved successfully',
+    });
+  } catch (err) {
+    console.error('Error fetching product:', error);
+    return res.status(500).json({
+      error: true,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
 // Create product
 export const createProduct = async (req, res) => {
   const {
