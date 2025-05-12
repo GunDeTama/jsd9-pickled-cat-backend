@@ -6,5 +6,4 @@ const router = Router();
 // Get all products
 router.get('/products', getAllProducts);
 
-
 export default router;
