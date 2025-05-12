@@ -6,12 +6,12 @@ import { errorMiddleware } from './api/v1/middlewares/errorMiddleware.js';
 import { loggerMiddlewares } from './api/v1/middlewares/loggerMiddleware.js';
 
 import helmet from 'helmet';
-import { corsOptions } from './configs/cors.js';
 
 const app = express();
 
 app.use(helmet());
 app.use(cors(corsOptions));
+
 app.use(json());
 app.use(loggerMiddlewares);
 
