@@ -6,12 +6,27 @@ export const createUser = async (req, res, next) => {
   try {
     // console.log('Request body:', req.body);
     
-    // รับเฉพาะ fields ที่จำเป็น
-    const { firstname, lastname, email, password } = req.body;
+    // รับ fields ทั้งหมดจาก request body
+    const { 
+      firstname, 
+      lastname, 
+      email, 
+      password,
+      phone,
+      address 
+    } = req.body;
 
     // ตรวจสอบว่ามีข้อมูลครบทุก fields ที่จำเป็น
     if (!firstname || !lastname || !email || !password) {
       throw new BadRequestError('กรุณากรอกข้อมูลให้ครบ (firstname, lastname, email, password)');
+    }
+
+    // ตรวจสอบว่ามีข้อมูล address ครบถ้วนหรือไม่ (ถ้ามีการส่ง address มา)
+    if (address) {
+      const { sub_district, district, province, postal_code } = address;
+      if (!sub_district || !district || !province || !postal_code) {
+        throw new BadRequestError('กรุณากรอกข้อมูลที่อยู่ให้ครบถ้วน (sub_district, district, province, postal_code)');
+      }
     }
 
     // console.log('Checking existing user for email:', email);
@@ -27,7 +42,9 @@ export const createUser = async (req, res, next) => {
       firstname,
       lastname,
       email,
-      password
+      password,
+      phone,
+      address
     });
 
     try {
