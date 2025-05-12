@@ -10,11 +10,22 @@ check_if_esmodule() {
   fi
 }
 
+check_if_named_export() {
+  grep '^export default.*' "$1" >/dev/null
+  if [ $? -eq 0 ]; then
+    echo "Found default export, must use named export in $1"
+    errors=$((errors + 1))
+  fi
+}
+
 if command -v find grep printf >/dev/null; then
   # Check if all files use ESmodule and not CommonJS.
-  files=$(find . -name '*.js' -not -path '*/node_modules/*')
+  files=$(find './src/' -name '*.js' -not -path '*/node_modules/*')
   for file in $files; do
     check_if_esmodule "$file"
+  done
+  for file in $files; do
+    check_if_named_export "$file"
   done
 
   # Check if all filenames are not snake_case except in `scripts/`.
