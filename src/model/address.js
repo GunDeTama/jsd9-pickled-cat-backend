@@ -1,44 +1,31 @@
 import mongoose from 'mongoose';
 
 const addressSchema = new mongoose.Schema({
-  street: {
+  additional: {
     type: String,
-    required: true,
-    trim: true,
+    maxlength: 500
   },
-  city: {
+  sub_district: {
     type: String,
-    required: true,
-    trim: true,
+    required: true
   },
-  state: {
+  district: {
     type: String,
-    required: true,
-    trim: true,
+    required: true
   },
-  zipCode: {
+  province: {
     type: String,
-    required: true,
-    trim: true,
+    required: true
   },
-  country: {
+  postal_code: {
     type: String,
-    required: true,
-    trim: true,
-  },
-  isDefault: {
-    type: Boolean,
-    default: false,
-  },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+    maxlength: 5,
+    validate: {
+      validator: (v) => /^\d{5}$/.test(v),
+      message: props => `${props.value} is not a valid postal code! Must be 5 digits`
+    }
+  }
 });
 
 export const Address = mongoose.model('Address', addressSchema);
+export { addressSchema };

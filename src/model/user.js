@@ -38,10 +38,7 @@ const UserSchema = new mongoose.Schema({
       message: (props) => `${props.value} is not a valid phone number!`,
     },
   },
-  addresses: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Address'
-  }],
+  address: addressSchema,
   role: {
     type: String,
     enum: ['admin', 'customer'],
@@ -55,7 +52,7 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+}, { versionKey: false });
 
 // Hash password before saving
 UserSchema.pre('save', async function(next) {
