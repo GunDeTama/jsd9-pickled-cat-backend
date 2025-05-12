@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "nodemon",
     "format": "prettier -w .",
+    "lint": ".github/workflows/scripts/main.sh",
     "start": "node src/server.js",
     "test": "vitest run",
     "test:watch": "vitest"
