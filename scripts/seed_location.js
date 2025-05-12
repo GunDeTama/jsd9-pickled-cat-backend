@@ -3,7 +3,7 @@ import fs from 'fs';
 import mongoose from 'mongoose';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import Location from '../src/model/location.js';
+import { Location } from '../src/model/Location.js';
 dotenv.config({ path: './.env.local' });
 
 const __filename = fileURLToPath(import.meta.url);

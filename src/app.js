@@ -1,6 +1,6 @@
 import cors from 'cors';
 import express, { json } from 'express';
-import apiRoutes from './api/v1/routes/routes.js';
+import { apiRoutes } from './api/v1/routes/routes.js';
 
 import { errorMiddleware } from './api/v1/middlewares/errorMiddleware.js';
 import { loggerMiddlewares } from './api/v1/middlewares/loggerMiddleware.js';
@@ -16,7 +16,6 @@ app.use(cors(corsOptions));
 app.use(json());
 app.use(loggerMiddlewares);
 
-// app.use('/healthcheck', healthcheckRoutes);
 app.use('/', apiRoutes);
 
 app.use(errorMiddleware);
