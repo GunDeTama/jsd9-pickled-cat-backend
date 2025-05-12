@@ -12,6 +12,7 @@ const app = express();
 
 app.use(helmet());
 app.use(cors(corsOptions));
+
 app.use(json());
 app.use(loggerMiddlewares);
 
