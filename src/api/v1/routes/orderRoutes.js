@@ -3,13 +3,12 @@ import {
   createOrder,
   createMyOrder,
   getOrderById
-} from '../controllers/order.controller.js';
-import { auth } from '../middlewares/auth.js';
+} from '../controllers/ordersControllers.js';
 
 const router = express.Router();
 
 router.post('/orders', createOrder);
-router.post('/orders/my', auth, createMyOrder);
-router.get('/orders/:id', auth, getOrderById);
+router.post('/orders/my', createMyOrder);
+router.get('/orders/:orderId', getOrderById);
 
-export default router;
+export {router as orderRoutes};
