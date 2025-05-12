@@ -11,13 +11,7 @@ import { corsOptions } from './configs/cors.js';
 const app = express();
 
 app.use(helmet());
-// app.use(cors(corsOptions));
-app.use(
-  cors({
-    origin: "http://localhost:5173", // URL ของ Front-End ที่อนุญาตให้เข้าถึง
-    credentials: true,               // อนุญาตส่ง cookies, headers
-  })
-);
+app.use(cors(corsOptions));
 app.use(json());
 app.use(loggerMiddlewares);
 
