@@ -1,27 +1,44 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const AddressSchema = new mongoose.Schema({
-  additional: {
+const addressSchema = new mongoose.Schema({
+  street: {
     type: String,
-    maxlength: 500
+    required: true,
+    trim: true,
   },
-  sub_district: {
-    type: String
-  },
-  district: {
-    type: String
-  },
-  province: {
-    type: String
-  },
-  postal_code: {
+  city: {
     type: String,
-    maxlength: 5,
-    validate: {
-      validator: v => /^\d{5}$/.test(v),
-      message: props => `${props.value} is not a valid postal code!`
-    }
-  }
+    required: true,
+    trim: true,
+  },
+  state: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  zipCode: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  country: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  isDefault: {
+    type: Boolean,
+    default: false,
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-module.exports = AddressSchema; 
+export const Address = mongoose.model('Address', addressSchema); 

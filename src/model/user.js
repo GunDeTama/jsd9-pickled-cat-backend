@@ -1,5 +1,7 @@
-const mongoose = require('mongoose');
-const AddressSchema = require('./address');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { Address } from './Address.js';
 
 const UserSchema = new mongoose.Schema({
   firstname: {
@@ -36,7 +38,7 @@ const UserSchema = new mongoose.Schema({
       message: props => `${props.value} is not a valid phone number!`
     }
   },
-  address: AddressSchema,
+  address: Address,
   role: {
     type: String,
     enum: ['admin', 'customer'],
@@ -52,4 +54,34 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('User', UserSchema); 
+// Hash password before saving
+UserSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Method to compare password
+UserSchema.methods.comparePassword = async function(candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
+
+// Method to generate JWT token
+UserSchema.methods.generateAuthToken = function() {
+  return jwt.sign(
+    { 
+      id: this._id,
+      role: this.role 
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '24h' }
+  );
+};
+
+export const User = mongoose.model('User', UserSchema); 
