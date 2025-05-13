@@ -1,32 +1,27 @@
 import mongoose from 'mongoose';
 
-const addressSchema = new mongoose.Schema({
-  additional: {
+export const addressSchema = new mongoose.Schema({
+  province: {
     type: String,
-    maxlength: 500,
+    required: [true, 'Province is required'],
   },
   sub_district: {
     type: String,
-    required: true,
+    required: [true, 'Sub district is required'],
   },
   district: {
     type: String,
-    required: true,
-  },
-  province: {
-    type: String,
-    required: true,
+    required: [true, 'District is required'],
   },
   postal_code: {
     type: String,
-    maxlength: 5,
-    validate: {
-      validator: (v) => /^\d{5}$/.test(v),
-      message: (props) =>
-        `${props.value} is not a valid postal code! Must be 5 digits`,
-    },
+    maxlength: [5, 'Postal code cannot be more than 5 characters'],
+    match: [/^\d{5}$/, 'Invalid postal code'],
+  },
+  additional_address: {
+    type: String,
+    maxlength: [500, 'Additional address cannot exceed 500 characters'],
   },
 });
 
 export const Address = mongoose.model('Address', addressSchema);
-export { addressSchema };

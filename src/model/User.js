@@ -1,89 +1,88 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import { config } from '../configs/env.js';
 import { addressSchema } from './Address.js';
 
 const UserSchema = new mongoose.Schema(
   {
     firstname: {
+      match: [/^[a-zA-Z]{2,50}$/, 'Invalid firstname'],
+      maxlength: [50, 'Firstname cannot be more than 50 characters'],
+      minlength: [2, 'Firstname cannot be less than 2 characters'],
+      required: [true, 'Firstname is required'],
+      trim: true,
       type: String,
-      maxlength: 100,
-      minlength: 1,
-      required: true,
     },
     lastname: {
+      match: [/^[a-zA-Z]{2,50}$/, 'Invalid lastname'],
+      maxlength: [50, 'Lastname cannot be more than 50 characters'],
+      minlength: [2, 'Lastname cannot be less than 2 characters'],
+      required: [true, 'Lastname is required'],
+      trim: true,
       type: String,
-      maxlength: 100,
-      minlength: 1,
-      required: true,
     },
     email: {
+      lowercase: true,
+      match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Invalid email'],
+      required: [true, 'Email is required'],
+      trim: true,
       type: String,
-      maxlength: 100,
-      minlength: 5,
-      required: true,
-      validate: {
-        validator: (v) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v),
-        message: (props) => `${props.value} is not a valid email!`,
-      },
+      unique: true,
     },
     password: {
+      maxlength: [32, 'Password cannot be more than 32 characters'],
+      minlength: [8, 'Password cannot be less than 8 characters'],
+      required: [true, 'Password is required'],
       type: String,
-      minlength: 6,
-      required: true,
     },
     phone: {
       type: String,
-      validate: {
-        validator: (v) => /^\d{9,10}$/.test(v),
-        message: (props) => `${props.value} is not a valid phone number!`,
-      },
+      trim: true,
+      match: [/^\d{9,10}$/, 'Invalid phone number'],
     },
     address: addressSchema,
     role: {
-      type: String,
-      enum: ['admin', 'customer'],
       default: 'customer',
-    },
-    created_at: {
-      type: Date,
-      default: Date.now,
-    },
-    updated_at: {
-      type: Date,
-      default: Date.now,
+      enum: {
+        message: 'Invalid account role',
+        values: ['admin', 'customer'],
+      },
+      type: String,
     },
   },
-  { versionKey: false },
+  {
+    timestamps: {
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+    },
+  },
 );
 
-// Hash password before saving
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (error) {
-    next(error);
+    console.error(error);
   }
 });
 
-// Method to compare password
+/** @param {string} candidatePassword */
 UserSchema.methods.comparePassword = async function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
+  return await bcrypt.compare(String(candidatePassword), this.password);
 };
 
-// Method to generate JWT token
 UserSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     {
       id: this._id,
       role: this.role,
     },
-    process.env.JWT_SECRET,
-    { expiresIn: '24h' },
+    config.JWT_SECRET,
+    { expiresIn: config.JWT_EXPIRES_IN },
   );
 };
 
