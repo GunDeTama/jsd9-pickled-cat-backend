@@ -109,7 +109,7 @@ export const logout = (_, res) => {
 /** @type {import('express').RequestHandler} */
 export const getProfileById = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params?.userId); // TODO: Get `_id` from cookies
+    const user = await User.findById(req.params.userId); // TODO: Get `_id` from cookies
     if (!user) return next(new NotFoundError('User not found'));
     user.password = undefined;
     res.json(new ResponseConstructor('User found', user));
@@ -127,7 +127,7 @@ export const updateProfileById = async (req, res, next) => {
 
   try {
     // Get existed user data
-    const existedUserData = await User.findById(req.params?.userId);
+    const existedUserData = await User.findById(req.params.userId);
     if (!existedUserData) return next(new NotFoundError('User not found'));
 
     // Validate address
@@ -171,7 +171,7 @@ export const updateProfileById = async (req, res, next) => {
 
     // TODO: Get `_id` from cookies
     const updatedUserData = await User.findByIdAndUpdate(
-      req.params?.userId,
+      req.params.userId,
       newUserData,
       { new: true },
     ).select('-password');
@@ -187,7 +187,7 @@ export const updateProfileById = async (req, res, next) => {
 /** @type {import('express').RequestHandler} */
 export const deleteProfileById = async (req, res, next) => {
   try {
-    const result = await User.findByIdAndDelete(req.params?.userId).select(
+    const result = await User.findByIdAndDelete(req.params.userId).select(
       '-password',
     ); // TODO: Get `_id` from cookies
     if (!result) return next(new NotFoundError('User not found'));
