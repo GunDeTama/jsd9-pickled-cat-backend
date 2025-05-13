@@ -16,7 +16,7 @@ export const getAllPayments = async (req, res) => {
 export const getPaymentById = async (req, res) => {
   const paymentId = req.params.paymentId;
   try {
-    const payment = await Payment.findById({_id :paymentId});
+    const payment = await Payment.findById(paymentId);
     if (!payment){
       return res.status(404).json({
         error: true,
