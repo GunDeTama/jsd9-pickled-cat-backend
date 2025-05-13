@@ -14,7 +14,9 @@ export const createOrder = async (req, res) => {
       status,
     });
     await newOrder.save();
-    res.status(201).json({ message: 'Order created successfully', order: newOrder });
+    res
+      .status(201)
+      .json({ message: 'Order created successfully', order: newOrder });
   } catch (err) {
     res.status(500).json({
       message: 'Internal server error',
@@ -26,7 +28,7 @@ export const createOrder = async (req, res) => {
 // Create a new order by a logged-in user
 export const createMyOrder = async (req, res) => {
   try {
-    const order =await Order.findById(req.orderId).populate('user_id');
+    const order = await Order.findById(req.orderId).populate('user_id');
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
@@ -37,7 +39,9 @@ export const createMyOrder = async (req, res) => {
       status: order.status,
     });
     await newOrder.save();
-    res.status(201).json({ message: 'Order created successfully', order: newOrder });
+    res
+      .status(201)
+      .json({ message: 'Order created successfully', order: newOrder });
   } catch (err) {
     res.status(500).json({
       message: 'Internal server error',
