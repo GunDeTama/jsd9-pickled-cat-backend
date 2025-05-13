@@ -31,11 +31,7 @@ export const register = async (req, res, next) => {
 
   const errors = user.validateSync();
   if (errors) {
-    let formattedErrors = [];
-    for (const field of userFields) {
-      if (!errors.errors[field]) continue;
-      formattedErrors.push(errors.errors[field].message);
-    }
+    let formattedErrors = formatErrors(errors, userFields);
     if (formattedErrors.length > 0)
       return next(
         new BadRequestError('Invalid user form fields', formattedErrors),
