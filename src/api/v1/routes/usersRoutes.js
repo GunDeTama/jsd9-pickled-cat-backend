@@ -16,7 +16,7 @@ router.get('/users/logout', logout);
 
 // TODO: middleware: check if login
 router.get('/users/profile/:userId', getProfileById);
-router.delete('/users/profile/:userId', deleteProfileById); // TODO: Next
-router.patch('/users/profile/:userId', updateProfileById); // TODO: Next
+router.delete('/users/profile/:userId', deleteProfileById);
+router.patch('/users/profile/:userId', updateProfileById);
 
 export { router as usersRoutes };

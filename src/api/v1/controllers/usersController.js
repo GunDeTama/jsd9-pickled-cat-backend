@@ -1,3 +1,4 @@
+import { Address } from '../../../model/Address.js';
 import { User } from '../../../model/User.js';
 import {
   BadRequestError,
@@ -6,6 +7,15 @@ import {
   UnauthorizedError,
 } from '../../../utils/error.js';
 import { ResponseConstructor } from '../../../utils/response.js';
+import { formatErrors } from '../../../utils/utils.js';
+
+const addressFields = [
+  'province',
+  'sub_district',
+  'district',
+  'postal_code',
+  'additional_address',
+];
 
 const userFields = [
   'firstname',
@@ -109,11 +119,80 @@ export const getProfileById = async (req, res, next) => {
 };
 
 /** @type {import('express').RequestHandler} */
-export const updateProfileById = (req, res, next) => {
-  next(new NotImplementedError());
+export const updateProfileById = async (req, res, next) => {
+  if (!req.body) return next(new BadRequestError('Invalid request body'));
+  const { firstname, lastname, email, phone, address } = req.body;
+  const { province, sub_district, district, postal_code, additional_address } =
+    address;
+
+  try {
+    // Get existed user data
+    const existedUserData = await User.findById(req.params?.userId);
+    if (!existedUserData) return next(new NotFoundError('User not found'));
+
+    // Validate address
+    const newAddressData = {
+      province: province ?? existedUserData.address?.province,
+      sub_district: sub_district ?? existedUserData.address?.sub_district,
+      district: district ?? existedUserData.address?.district,
+      postal_code: postal_code ?? existedUserData.address?.postal_code,
+      additional_address:
+        additional_address ?? existedUserData.address?.additional_address,
+    };
+    const newAddressSubDocument = new Address(newAddressData);
+    const addressErrors = newAddressSubDocument.validateSync();
+    if (addressErrors) {
+      let formattedErrors = formatErrors(addressErrors, addressFields);
+      if (formattedErrors.length > 0)
+        return next(
+          new BadRequestError('Invalid user form fields', formattedErrors),
+        );
+    }
+
+    // Create new user data
+    const newUserData = {
+      firstname: firstname ?? existedUserData.firstname,
+      lastname: lastname ?? existedUserData.lastname,
+      email: email ?? existedUserData.email,
+      phone: phone ?? existedUserData.phone,
+      address: newAddressData ?? existedUserData.address,
+    };
+    const newUserDocument = new User(newUserData);
+    const userSchemaErrors = newUserDocument.validateSync({
+      pathsToSkip: ['password'],
+    });
+    if (userSchemaErrors) {
+      let formattedErrors = formatErrors(userSchemaErrors, userFields);
+      if (formattedErrors.length > 0)
+        return next(
+          new BadRequestError('Invalid user form fields', formattedErrors),
+        );
+    }
+
+    // TODO: Get `_id` from cookies
+    const updatedUserData = await User.findByIdAndUpdate(
+      req.params?.userId,
+      newUserData,
+      { new: true },
+    ).select('-password');
+
+    res.json(
+      new ResponseConstructor('Update user profile success', updatedUserData),
+    );
+  } catch (error) {
+    next(new InternalServerError(error.message));
+  }
 };
 
 /** @type {import('express').RequestHandler} */
-export const deleteProfileById = (req, res, next) => {
-  next(new NotImplementedError());
+export const deleteProfileById = async (req, res, next) => {
+  try {
+    const result = await User.findByIdAndDelete(req.params?.userId).select(
+      '-password',
+    ); // TODO: Get `_id` from cookies
+    if (!result) return next(new NotFoundError('User not found'));
+    res.json(new ResponseConstructor('Delete user success', result));
+  } catch (error) {
+    next(new InternalServerError(error.message));
+  }
 };
