@@ -1,5 +1,5 @@
-name: format
-run-name: format
+name: format-lint
+run-name: format-lint
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ on:
       - synchronize
 
 jobs:
-  format-lint-build:
+  format-lint:
     runs-on: ubuntu-latest
     permissions:
       # Give the default GITHUB_TOKEN write permission to commit and push the
@@ -27,9 +27,11 @@ jobs:
         with:
           node-version: lts/*
           check-latest: true
-      - run: npm ci
+      - run: npm i -D
+      - name: lint
+        run: npm run lint
       - name: format
         run: npm run format
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'style: auto format'
+          commit_message: 'style: auto lint and format'
