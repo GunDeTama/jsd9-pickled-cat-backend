@@ -7,7 +7,7 @@ import { addressSchema } from './Address.js';
 const UserSchema = new mongoose.Schema(
   {
     firstname: {
-      match: [/^[a-zA-Z]{2,50}$/, 'Invalid firstname'],
+      match: [/^[a-zA-Z]{2,50}$/, '"{VALUE} firstname is not valid'],
       maxlength: [50, 'Firstname cannot be more than 50 characters'],
       minlength: [2, 'Firstname cannot be less than 2 characters'],
       required: [true, 'Firstname is required'],
@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
     },
     lastname: {
-      match: [/^[a-zA-Z]{2,50}$/, 'Invalid lastname'],
+      match: [/^[a-zA-Z]{2,50}$/, '"{VALUE}" lastname is not valid'],
       maxlength: [50, 'Lastname cannot be more than 50 characters'],
       minlength: [2, 'Lastname cannot be less than 2 characters'],
       required: [true, 'Lastname is required'],
@@ -24,7 +24,7 @@ const UserSchema = new mongoose.Schema(
     },
     email: {
       lowercase: true,
-      match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Invalid email'],
+      match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, '{VALUE} email is not valid'],
       required: [true, 'Email is required'],
       trim: true,
       type: String,
@@ -39,7 +39,7 @@ const UserSchema = new mongoose.Schema(
     phone: {
       type: String,
       trim: true,
-      match: [/^\d{9,10}$/, 'Invalid phone number'],
+      match: [/^0\d{8,9}$/, '{VALUE} phone number is not valid'],
     },
     address: addressSchema,
     role: {
@@ -78,7 +78,7 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
 UserSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     {
-      id: this._id,
+      user_id: this._id,
       role: this.role,
     },
     config.JWT_SECRET,
@@ -86,4 +86,5 @@ UserSchema.methods.generateAuthToken = function () {
   );
 };
 
+// TODO: Research if possible, or add method to return all ValiationError at once.
 export const User = mongoose.model('User', UserSchema);
