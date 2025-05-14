@@ -4,12 +4,13 @@ const { JsonWebTokenError, TokenExpiredError } = jwt;
 import { config } from '../../../configs/env.js';
 import { User } from '../../../model/User.js';
 import {
+  ForbiddenError,
   InternalServerError,
   UnauthorizedError,
 } from '../../../utils/error.js';
 
 /** @type {import('express').RequestHandler} */
-export const authMiddleware = async (req, _, next) => {
+export const isLogin = async (req, _, next) => {
   /** @type {string} */
   const authToken = req.cookies?.authToken;
   if (!authToken)
@@ -31,4 +32,12 @@ export const authMiddleware = async (req, _, next) => {
       next(new UnauthorizedError('Invalid Token'));
     else next(new InternalServerError('Cannot verify token'));
   }
+};
+
+/** @type {import('express').RequestHandler} */
+export const isAdmin = async (req, _, next) => {
+  const { role } = req.user;
+  const admin = role.toLowerCase() === 'admin';
+  if (!admin) next(new ForbiddenError('Admin access required'));
+  next();
 };
