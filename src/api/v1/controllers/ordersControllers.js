@@ -63,7 +63,7 @@ export const createMyOrder = async (req, res) => {
       return res.status(404).json({ message: 'Order items are required' });
     }
     const newOrder = new Order({
-      user_id: req.user._id,
+      user_id: req.user.user_id,
       order_items,
       total_price,
       status,
@@ -82,9 +82,10 @@ export const createMyOrder = async (req, res) => {
 
 // Get my order
 export const getMyOrder = async (req, res) => {
-  const userId = '6655abc12345678901234567'; // ตัวอย่าง ObjectId แทน req.user._id
+  const userId = req.user.user_id;
   try {
-    const orders = await Order.find({ user_id: userId }).sort({ order_at: -1 });
+    const orders = await Order.find({ user_id: userId })
+    .sort({ order_at: -1 });
     res.json({ orders });
   } catch (err) {
     res.status(500).json({
