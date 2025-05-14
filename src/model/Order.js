@@ -30,6 +30,11 @@ const OrderItemSchema = new Schema({
     max: 2,
     required: true,
   },
+  discount: {
+    type: Number,
+    min: 0,
+    default: 0,
+  },
 });
 
 const OrderSchema = new Schema(
@@ -37,7 +42,7 @@ const OrderSchema = new Schema(
     user_id: {
       type: ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
     },
     order_items: {
       type: [OrderItemSchema],

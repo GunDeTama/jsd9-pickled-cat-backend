@@ -19,4 +19,4 @@ router.get('/users/profile', isLogin, getProfileById);
 router.delete('/users/profile', isLogin, deleteProfileById);
 router.patch('/users/profile', isLogin, updateProfileById);
 
-export { router as usersRoutes };
+export { router as userRoutes };
