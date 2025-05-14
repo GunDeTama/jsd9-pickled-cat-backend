@@ -84,8 +84,7 @@ export const createMyOrder = async (req, res) => {
 export const getMyOrder = async (req, res) => {
   const userId = req.user.user_id;
   try {
-    const orders = await Order.find({ user_id: userId })
-    .sort({ order_at: -1 });
+    const orders = await Order.find({ user_id: userId }).sort({ order_at: -1 });
     res.json({ orders });
   } catch (err) {
     res.status(500).json({
