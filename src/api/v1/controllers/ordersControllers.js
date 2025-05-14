@@ -58,7 +58,7 @@ export const createOrder = async (req, res) => {
 // Create a new order by a logged-in user
 export const createMyOrder = async (req, res) => {
   try {
-    const {order_items, total_price, status} = req.body;
+    const { order_items, total_price, status } = req.body;
     if (!order_items || order_items.length === 0) {
       return res.status(404).json({ message: 'Order items are required' });
     }
@@ -123,7 +123,7 @@ export const updateOrderStatus = async (req, res) => {
     const updatedOrder = await Order.findByIdAndUpdate(
       id,
       { status },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedOrder) {
@@ -132,6 +132,8 @@ export const updateOrderStatus = async (req, res) => {
 
     res.json({ message: 'Order status updated', order: updatedOrder });
   } catch (err) {
-    res.status(500).json({ message: 'Internal server error', error: err.message });
+    res
+      .status(500)
+      .json({ message: 'Internal server error', error: err.message });
   }
 };
