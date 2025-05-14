@@ -4,7 +4,6 @@ import { apiRoutes } from './api/v1/routes/routes.js';
 
 import { errorMiddleware } from './api/v1/middlewares/errorMiddleware.js';
 import { loggerMiddlewares } from './api/v1/middlewares/loggerMiddleware.js';
-import { orderRoutes } from './api/v1/routes/orderRoutes.js';
 
 import helmet from 'helmet';
 import { corsOptions } from './configs/cors.js';
@@ -17,7 +16,6 @@ app.use(cors(corsOptions));
 app.use(json());
 app.use(loggerMiddlewares);
 
-app.use('/api', orderRoutes);
 app.use('/', apiRoutes);
 
 app.use(errorMiddleware);

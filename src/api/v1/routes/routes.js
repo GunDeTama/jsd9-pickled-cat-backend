@@ -1,10 +1,12 @@
 import { Router } from 'express';
-import { productRoutes } from './productsRoutes.js';
-import { usersRoutes } from './usersRoutes.js';
+import { orderRoutes } from './orderRoutes.js';
+import { productRoutes } from './productRoutes.js';
+import { userRoutes } from './userRoutes.js';
 
 const router = Router();
 
-router.use('/api', usersRoutes);
+router.use('/api', userRoutes);
 router.use('/api', productRoutes);
+router.use('/api', orderRoutes);
 
 export { router as apiRoutes };
