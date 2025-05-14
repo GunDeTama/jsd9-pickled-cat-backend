@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { json } from 'express';
 import { apiRoutes } from './api/v1/routes/routes.js';
@@ -13,6 +14,7 @@ const app = express();
 
 app.use(helmet());
 app.use(cors(corsOptions));
+app.use(cookieParser());
 
 app.use(json());
 app.use(loggerMiddlewares);
