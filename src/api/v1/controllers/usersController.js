@@ -2,8 +2,8 @@ import { Address } from '../../../model/Address.js';
 import { User } from '../../../model/User.js';
 import {
   BadRequestError,
+  ConflictError,
   InternalServerError,
-  NotFoundError,
   UnauthorizedError,
 } from '../../../utils/error.js';
 import { ResponseConstructor } from '../../../utils/response.js';
@@ -57,25 +57,26 @@ export const register = async (req, res, next) => {
       /** @type {string} */
       const errorMessage = error['errorResponse'].errmsg;
       // NOTE: `email` field must be unique
-      const uniqueValudError = errorMessage.includes(
+      const duplicateEmailError = errorMessage.includes(
         'duplicate key error collection',
       );
 
-      if (uniqueValudError)
-        next(new InternalServerError('This email is already in use'));
-      else next(new InternalServerError());
+      if (duplicateEmailError)
+        next(new ConflictError('This email is already in use'));
+      else next(new InternalServerError(error.message));
     });
 };
 
 /** @type {import('express').RequestHandler} */
 export const login = async (req, res, next) => {
-  if (!req.body) next(new BadRequestError('Invalid request body'));
+  if (!req.body) return next(new BadRequestError('Invalid request body'));
   const { email, password } = req.body;
 
   try {
     const existedUser = await User.findOne({ email });
+    if (!existedUser) return next(new UnauthorizedError('Invalid credentials'));
     const passwordMatched = await existedUser.comparePassword(password);
-    if (!existedUser || !passwordMatched)
+    if (!passwordMatched)
       return next(new UnauthorizedError('Invalid credentials'));
 
     const authToken = await existedUser.generateAuthToken();
@@ -109,8 +110,7 @@ export const logout = (_, res) => {
 /** @type {import('express').RequestHandler} */
 export const getProfileById = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.userId); // TODO: Get `_id` from cookies
-    if (!user) return next(new NotFoundError('User not found'));
+    const user = await User.findById(req.user.user_id);
     user.password = undefined;
     res.json(new ResponseConstructor('User found', user));
   } catch (error) {
@@ -127,10 +127,13 @@ export const updateProfileById = async (req, res, next) => {
 
   try {
     // Get existed user data
-    const existedUserData = await User.findById(req.params.userId);
-    if (!existedUserData) return next(new NotFoundError('User not found'));
+    const existedUserData = await User.findById(req.user.user_id);
 
-    // Validate address
+    // -------------------- Validation --------------------
+    // ----------------------------------------------------
+    let formattedErrors = [];
+
+    // Create and validate new address subdocument
     const newAddressData = {
       province: province ?? existedUserData.address?.province,
       sub_district: sub_district ?? existedUserData.address?.sub_district,
@@ -141,15 +144,10 @@ export const updateProfileById = async (req, res, next) => {
     };
     const newAddressSubDocument = new Address(newAddressData);
     const addressErrors = newAddressSubDocument.validateSync();
-    if (addressErrors) {
-      let formattedErrors = formatErrors(addressErrors, addressFields);
-      if (formattedErrors.length > 0)
-        return next(
-          new BadRequestError('Invalid user form fields', formattedErrors),
-        );
-    }
+    if (addressErrors)
+      formattedErrors.push(...formatErrors(addressErrors, addressFields));
 
-    // Create new user data
+    // Create and validate new user document
     const newUserData = {
       firstname: firstname ?? existedUserData.firstname,
       lastname: lastname ?? existedUserData.lastname,
@@ -161,17 +159,18 @@ export const updateProfileById = async (req, res, next) => {
     const userSchemaErrors = newUserDocument.validateSync({
       pathsToSkip: ['password'],
     });
-    if (userSchemaErrors) {
-      let formattedErrors = formatErrors(userSchemaErrors, userFields);
-      if (formattedErrors.length > 0)
-        return next(
-          new BadRequestError('Invalid user form fields', formattedErrors),
-        );
-    }
+    if (userSchemaErrors)
+      formattedErrors.push(...formatErrors(userSchemaErrors, userFields));
 
-    // TODO: Get `_id` from cookies
+    if (formattedErrors.length > 0)
+      return next(
+        new BadRequestError('Invalid user form fields', formattedErrors),
+      );
+    // -------------------- End validation ----------------
+    // ----------------------------------------------------
+
     const updatedUserData = await User.findByIdAndUpdate(
-      req.params.userId,
+      req.user.user_id,
       newUserData,
       { new: true },
     ).select('-password');
@@ -180,17 +179,20 @@ export const updateProfileById = async (req, res, next) => {
       new ResponseConstructor('Update user profile success', updatedUserData),
     );
   } catch (error) {
-    next(new InternalServerError(error.message));
+    const duplicateEmailError = error.message.includes(
+      'duplicate key error collection',
+    );
+    if (duplicateEmailError) next(new ConflictError('Email already in use'));
+    else next(new InternalServerError(error.message));
   }
 };
 
 /** @type {import('express').RequestHandler} */
 export const deleteProfileById = async (req, res, next) => {
   try {
-    const result = await User.findByIdAndDelete(req.params.userId).select(
+    const result = await User.findByIdAndDelete(req.user.user_id).select(
       '-password',
-    ); // TODO: Get `_id` from cookies
-    if (!result) return next(new NotFoundError('User not found'));
+    );
     res.json(new ResponseConstructor('Delete user success', result));
   } catch (error) {
     next(new InternalServerError(error.message));
