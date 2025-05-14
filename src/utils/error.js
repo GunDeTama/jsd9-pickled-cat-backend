@@ -32,6 +32,16 @@ export class UnauthorizedError extends ResponseError {
   }
 }
 
+export class ForbiddenError extends ResponseError {
+  /**
+   * @param {string} message - Custom error message for statusCode 403
+   * @param {*} errors
+   */
+  constructor(message = 'Forbidden', errors = undefined) {
+    super(message, 403, errors);
+  }
+}
+
 export class NotFoundError extends ResponseError {
   /**
    * @param {string} message - Custom error message for statusCode 404
@@ -39,6 +49,13 @@ export class NotFoundError extends ResponseError {
    */
   constructor(message = 'Not found', errors = undefined) {
     super(message, 404, errors);
+  }
+}
+
+export class ConflictError extends ResponseError {
+  /** @param {string} message - Custom error message for statusCode 409 */
+  constructor(message = 'Conflict error') {
+    super(message, 409);
   }
 }
 
