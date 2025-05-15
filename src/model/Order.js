@@ -8,6 +8,10 @@ const OrderItemSchema = new Schema({
     ref: 'Product',
     required: true,
   },
+  product_name: {
+    type: String,
+    required: true,
+  },
   quantity: {
     type: SchemaTypes.Int32,
     min: 1,
@@ -34,6 +38,10 @@ const OrderItemSchema = new Schema({
     type: Number,
     min: 0,
     default: 0,
+  },
+  image: {
+    type: String,
+    required: false,
   },
 });
 
