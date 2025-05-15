@@ -81,14 +81,6 @@ export const login = async (req, res, next) => {
 
     const authToken = await existedUser.generateAuthToken();
 
-    const isProd = process.env.NODE_ENV === 'production';
-    res.cookie('authToken', authToken, {
-      httpOnly: true,
-      maxAge: 60 * 60 * 1000, // 1hr
-      sameSite: 'lax',
-      secure: isProd,
-    });
-
     existedUser.password = undefined;
 
     return res.json(

@@ -11,9 +11,7 @@ import {
 
 /** @type {import('express').RequestHandler} */
 export const isLogin = async (req, _, next) => {
-  const authToken = req.cookies?.authToken;
-  console.log(`From cookie-parser: ${authToken}
-From headers ${req.headers.cookie}`);
+  const authToken = req.headers['authorization'].split(' ').at(1);
   if (!authToken)
     return next(new UnauthorizedError('Not authorized to access this route'));
 
