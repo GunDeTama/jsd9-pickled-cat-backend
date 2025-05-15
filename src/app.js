@@ -10,16 +10,17 @@ import helmet from 'helmet';
 
 const app = express();
 
+// Render specific
+app.set('trust proxy', 1);
+
 app.use(helmet());
-//app.use(cors(corsOptions));
 app.use(
   cors({
     origin: [
       'http://localhost:5173',
-      'http://localhost:5175',
       'https://jsd9-pickled-cat-frontend.vercel.app',
-    ], // your frontend domain
-    credentials: true, // ✅ allow cookies to be sent
+    ],
+    credentials: true,
   }),
 );
 app.use(cookieParser());
