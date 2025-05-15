@@ -22,7 +22,6 @@ router.get('/orders', getAllOrders); // ดึง orders ทั้งหมด�
 router.get('/orders/status/:status', getOrdersByStatus); // ดึง orders ตาม status
 router.get('/orders/:orderId', getOrderById);
 
-
 // อัพเดท Status
 router.patch('/orders/:id/status', updateOrderStatus);
 
