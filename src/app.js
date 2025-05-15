@@ -19,6 +19,7 @@ app.use(
     origin: [
       'http://localhost:5173',
       'https://jsd9-pickled-cat-frontend.vercel.app',
+      'https://main.d2au9fljvs9598.amplifyapp.com',
     ],
     credentials: true,
   }),
