@@ -118,12 +118,12 @@ export const getAllOrders = async (req, res) => {
     res.status(200).json({
       message: 'Orders retrieved successfully',
       orders,
-      count: orders.length
+      count: orders.length,
     });
   } catch (err) {
     res.status(500).json({
       message: 'Failed to fetch orders',
-      error: err.message
+      error: err.message,
     });
   }
 };
@@ -132,23 +132,23 @@ export const getAllOrders = async (req, res) => {
 export const getOrdersByStatus = async (req, res) => {
   try {
     const { status } = req.params;
-    
+
     // ตรวจสอบว่า status ที่ส่งมาถูกต้องหรือไม่
     if (!['Pending', 'Shipped', 'Delivered', 'Cancelled'].includes(status)) {
       return res.status(400).json({ message: 'Invalid status parameter' });
     }
-    
+
     const orders = await Order.find({ status }).sort({ order_at: -1 });
-    
+
     res.status(200).json({
       message: `${status} orders retrieved successfully`,
       orders,
-      count: orders.length
+      count: orders.length,
     });
   } catch (err) {
     res.status(500).json({
       message: 'Failed to fetch orders by status',
-      error: err.message
+      error: err.message,
     });
   }
 };
@@ -159,7 +159,9 @@ export const updateOrderStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 
-    if (!['Pending', 'Paid', 'Shipped', 'Delivered', 'Cancelled'].includes(status)) {
+    if (
+      !['Pending', 'Paid', 'Shipped', 'Delivered', 'Cancelled'].includes(status)
+    ) {
       return res.status(400).json({ message: 'Invalid status value' });
     }
 
