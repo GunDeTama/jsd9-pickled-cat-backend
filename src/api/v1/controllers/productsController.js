@@ -91,19 +91,17 @@ export const editProduct = async (req, res) => {
     images = [],
   } = req.body;
   if (
-    !name ||
-    !description ||
-    !price ||
-    !discount ||
-    !stock ||
-    !category ||
-    !option ||
-    !sizes ||
-    !images
+    name === undefined ||
+    description === undefined ||
+    price === undefined ||
+    category === undefined ||
+    images === undefined ||
+    !Array.isArray(images) ||
+    images.length < 1
   ) {
     return res.status(400).json({
       error: true,
-      message: 'All fields require a value.',
+      message: 'Required fields are missing or invalid.',
     });
   }
   try {
